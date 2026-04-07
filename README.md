@@ -1,3 +1,9 @@
+## Dibuat oleh:
+
+- **Nama**: Martino
+- **NIM**: 123140165
+- **Prodi**: Teknik Informatika - ITERA
+
 # Notes App - Multi-Screen Navigation (Tugas Minggu 5)
 
 Proyek ini merupakan pengembangan dari aplikasi catatan (Notes App) menggunakan Compose Multiplatform. Fokus utama pada pertemuan ini adalah implementasi sistem navigasi antar layar, manajemen back stack, dan pengiriman data (arguments) antar destinasi.
@@ -59,8 +65,3 @@ Silakan tonton video demo durasi 30 detik yang menunjukkan seluruh alur navigasi
 3. Pastikan dependency navigation-compose sudah terpasang.
 4. Jalankan aplikasi di Android Emulator atau perangkat fisak.
 
-## Dibuat oleh:
-
-- **Nama**: Martino
-- **NIM**: 123140165
-- **Prodi**: Teknik Informatika - ITERA
