@@ -1,35 +1,66 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Notes App - Multi-Screen Navigation (Tugas Minggu 5)
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+Proyek ini merupakan pengembangan dari aplikasi catatan (Notes App) menggunakan Compose Multiplatform. Fokus utama pada pertemuan ini adalah implementasi sistem navigasi antar layar, manajemen back stack, dan pengiriman data (arguments) antar destinasi.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## 📑 Struktur Proyek
 
-### Build and Run Android Application
+Sesuai dengan panduan struktur folder yang diminta:
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+- **navigation/**: Berisi konfigurasi rute, sealed class layar, dan AppNavigation.
+- **screens/**: Berisi UI untuk setiap fitur (Notes, Favorites, Profile).
+- **components/**: Berisi komponen UI yang dapat digunakan kembali seperti BottomNavBar.
+- **viewmodel/**: Berisi logika manajemen state menggunakan StateFlow.
 
-### Build and Run iOS Application
+## 🚀 Fitur Utama (Pertemuan 5)
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+- **Bottom Navigation**: Menggunakan Scaffold dengan 3 tab utama: Notes, Favorites, dan Profile.
+- **Navigation with Arguments**: Implementasi pengiriman noteId dari daftar catatan ke layar detail dan edit.
+- **Floating Action Button (FAB)**: Akses cepat untuk menambah catatan baru dari layar utama.
+- **Local Storage (ViewModel)**: Data catatan disimpan dalam NoteViewModel agar tetap sinkron antar layar (Notes dan Favorites).
+- **Customization**: Fitur memilih warna kartu (Card Color) saat menambah catatan dan integrasi fitur profil (Edit Profile & Dark/Light Mode) dari pertemuan sebelumnya.
 
----
+## 🗺️ Diagram Alur Navigasi
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+Berikut adalah alur perjalanan pengguna dalam aplikasi:
+
+- Notes Tab → Klik Note → Detail Note → Klik Edit → Edit Note.
+- FAB → Add Note Screen.
+- Bottom Navigation Switch: Menggunakan popUpTo dan launchSingleTop untuk navigasi tab yang efisien.
+
+## 🎥 Video Demo
+
+Silakan tonton video demo durasi 30 detik yang menunjukkan seluruh alur navigasi aplikasi:
+
+[Tonton Video Demo di Sini](https://drive.google.com/file/d/15WAlCU42uKsS1telFeqh6VswnuWTF_8L/view?usp=drivesdk)
+
+## 📸 Screenshots
+
+### Notes List
+
+![1775577787353](image/README/1775577787353.png)
+
+### Add Note (Custom Color)
+![1775577977505](image/README/1775577977505.png)
+
+
+
+### Favorites Screen
+![1775577795226](image/README/1775577795226.png)
+
+
+### Profile (Dark Mode)
+![1775577801221](image/README/1775577801221.png)
+
+
+## 🛠️ Cara Menjalankan
+
+1. Clone repository ini: `git clone -b week-5 https://github.com/username/repo-name.git`.
+2. Buka di Android Studio (Ladybug atau versi terbaru).
+3. Pastikan dependency navigation-compose sudah terpasang.
+4. Jalankan aplikasi di Android Emulator atau perangkat fisak.
+
+## Dibuat oleh:
+
+- **Nama**: Martino
+- **NIM**: 123140165
+- **Prodi**: Teknik Informatika - ITERA

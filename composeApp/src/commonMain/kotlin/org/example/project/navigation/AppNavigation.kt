@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import androidx.navigation.navArgument
@@ -11,12 +12,14 @@ import org.example.project.components.BottomNavBar
 import org.example.project.screens.favorites.FavoritesScreen
 import org.example.project.screens.profile.ProfileScreen
 import org.example.project.screens.notes.*
+import org.example.project.viewmodel.NoteViewModel
 
 
 @Composable
 fun AppNavigation() {
 
     val navController = rememberNavController()
+    val noteViewModel: NoteViewModel = viewModel() // Pastikan satu instance untuk semua screen
 
     Scaffold(
         bottomBar = {
@@ -40,6 +43,7 @@ fun AppNavigation() {
             // Bottom Tabs
             composable(Screen.Notes.route) {
                 NoteListScreen(
+                    viewModel = noteViewModel,
                     onNoteClick = { noteId ->
                         navController.navigate(Screen.NoteDetail.createRoute(noteId))
                     }
@@ -47,7 +51,7 @@ fun AppNavigation() {
             }
 
             composable(Screen.Favorites.route) {
-                FavoritesScreen()
+                FavoritesScreen(viewModel = noteViewModel)
             }
 
             composable(Screen.Profile.route) {
@@ -57,6 +61,7 @@ fun AppNavigation() {
             // Add Note
             composable(Screen.AddNote.route) {
                 AddNoteScreen(
+                    viewModel = noteViewModel,
                     onBack = { navController.popBackStack() }
                 )
             }
@@ -94,3 +99,4 @@ fun AppNavigation() {
         }
     }
 }
+
