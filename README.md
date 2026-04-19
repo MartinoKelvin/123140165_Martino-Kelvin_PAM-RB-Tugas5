@@ -1,67 +1,46 @@
-## Dibuat oleh:
+# 📰 News & Notes App - Kotlin Multiplatform (KMP)
 
-- **Nama**: Martino
+Aplikasi ini dikembangkan sebagai tugas praktikum **Pengembangan Aplikasi Mobile (PAM)** di **Informatika ITERA**. Project ini mendemonstrasikan implementasi Networking (Ktor), Image Loading (Coil), dan Arsitektur MVVM pada Kotlin Multiplatform.
+
+## 👤 Identitas Mahasiswa
+- **Nama**: Martino Kelvin
 - **NIM**: 123140165
-- **Prodi**: Teknik Informatika - ITERA
+- **Program Studi**: Informatika
+- **Instansi**: Institut Teknologi Sumatera (ITERA)
 
-# Notes App - Multi-Screen Navigation (Tugas Minggu 5)
+## 🎥 Link Video Demo
+- **Video Link**: https://drive.google.com/drive/folders/13Jz_8uMY6uVJFZ_Vqv9dCKzhHlVvx8oX
 
-Proyek ini merupakan pengembangan dari aplikasi catatan (Notes App) menggunakan Compose Multiplatform. Fokus utama pada pertemuan ini adalah implementasi sistem navigasi antar layar, manajemen back stack, dan pengiriman data (arguments) antar destinasi.
+## 🚀 Fitur Utama
+- **News Reader (Real-time)**: Mengambil berita teknologi terbaru dari API `saurav.tech` menggunakan Ktor Client.
+- **News Detail**: Menampilkan konten berita secara penuh dengan dukungan gambar (Coil3) dan fitur scrollable.
+- **Notes Management**: Fitur CRUD catatan dengan integrasi favorit.
+- **Modern UI**: Dibangun sepenuhnya menggunakan Jetpack Compose dengan skema warna konsisten (Orange-Cream).
 
-## 📑 Struktur Proyek
+## 📊 Manajemen UI States (Rubrik Penilaian: 25%)
+Aplikasi menggunakan `sealed class NewsUiState` untuk menangani siklus hidup pengambilan data secara reaktif:
+1.  **Loading State**: Menampilkan `CircularProgressIndicator` saat aplikasi melakukan request ke API. Memberikan feedback visual kepada pengguna agar tidak bingung saat proses sinkronisasi data berlangsung.
+2.  **Success State**: Menampilkan daftar berita dalam bentuk `LazyColumn` setelah data berhasil diparsing dari JSON.
+3.  **Error State**: Menampilkan pesan error yang informatif dan tombol **"Retry"** jika terjadi gangguan koneksi (Network Error) atau kegagalan server, sehingga pengguna bisa mencoba memuat ulang data tanpa restart aplikasi.
 
-Sesuai dengan panduan struktur folder yang diminta:
+## 🛠️ Stack Teknologi
+- **Core**: Kotlin Multiplatform (KMP)
+- **UI Framework**: Compose Multiplatform
+- **Networking**: Ktor Client (Content Negotiation & JSON Serialization)
+- **Image Loading**: Coil 3 (Network Support)
+- **Navigation**: Jetpack Navigation Compose
+- **Concurrency**: Kotlin Coroutines & Flow
 
-- **navigation/**: Berisi konfigurasi rute, sealed class layar, dan AppNavigation.
-- **screens/**: Berisi UI untuk setiap fitur (Notes, Favorites, Profile).
-- **components/**: Berisi komponen UI yang dapat digunakan kembali seperti BottomNavBar.
-- **viewmodel/**: Berisi logika manajemen state menggunakan StateFlow.
+## 📂 Struktur Proyek
+- `data/`: Model data (`NewsResponse`, `Article`) dan `NewsRepository`.
+- `viewmodel/`: `NewsViewModel` (StateFlow & mutableStateOf untuk Detail).
+- `screens/news/`: `NewsScreen` (List) dan `NewsDetailScreen` (Detail Content).
+- `navigation/`: Konfigurasi rute navigasi dan Bottom Navigation.
 
-## 🚀 Fitur Utama (Pertemuan 5)
+## 📖 Cara Menjalankan Project
+1. **Sync Gradle**: Pastikan `mavenCentral()` sudah terdaftar di `settings.gradle.kts`.
+2. **Permission**: Izin internet sudah terpasang di `AndroidManifest.xml`.
+3. **Run**: Pilih modul `:composeApp` dan jalankan pada perangkat Android.
 
-- **Bottom Navigation**: Menggunakan Scaffold dengan 3 tab utama: Notes, Favorites, dan Profile.
-- **Navigation with Arguments**: Implementasi pengiriman noteId dari daftar catatan ke layar detail dan edit.
-- **Floating Action Button (FAB)**: Akses cepat untuk menambah catatan baru dari layar utama.
-- **Local Storage (ViewModel)**: Data catatan disimpan dalam NoteViewModel agar tetap sinkron antar layar (Notes dan Favorites).
-- **Customization**: Fitur memilih warna kartu (Card Color) saat menambah catatan dan integrasi fitur profil (Edit Profile & Dark/Light Mode) dari pertemuan sebelumnya.
-
-## 🗺️ Diagram Alur Navigasi
-
-Berikut adalah alur perjalanan pengguna dalam aplikasi:
-
-- Notes Tab → Klik Note → Detail Note → Klik Edit → Edit Note.
-- FAB → Add Note Screen.
-- Bottom Navigation Switch: Menggunakan popUpTo dan launchSingleTop untuk navigasi tab yang efisien.
-
-## 🎥 Video Demo
-
-Silakan tonton video demo durasi 30 detik yang menunjukkan seluruh alur navigasi aplikasi:
-
-[Tonton Video Demo di Sini](https://drive.google.com/file/d/15WAlCU42uKsS1telFeqh6VswnuWTF_8L/view?usp=drivesdk)
-
-## 📸 Screenshots
-
-### Notes List
-
-![1775577787353](image/README/1775577787353.png)
-
-### Add Note (Custom Color)
-![1775577977505](image/README/1775577977505.png)
-
-
-
-### Favorites Screen
-![1775577795226](image/README/1775577795226.png)
-
-
-### Profile (Dark Mode)
-![1775577801221](image/README/1775577801221.png)
-
-
-## 🛠️ Cara Menjalankan
-
-1. Clone repository ini: `git clone -b week-5 https://github.com/username/repo-name.git`.
-2. Buka di Android Studio (Ladybug atau versi terbaru).
-3. Pastikan dependency navigation-compose sudah terpasang.
-4. Jalankan aplikasi di Android Emulator atau perangkat fisak.
-
+---
+© 2026 Martino Kelvin - 123140165 - Informatika ITERA

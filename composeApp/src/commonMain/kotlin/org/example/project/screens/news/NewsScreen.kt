@@ -11,75 +11,135 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import org.example.project.viewmodel.NewsViewModel
-import org.example.project.viewmodel.NewsUiState
-// ... import lainnya ...
 import coil3.compose.AsyncImage
 import org.example.project.data.Article
+import org.example.project.viewmodel.NewsViewModel
+import org.example.project.viewmodel.NewsUiState
 
 @Composable
 fun NewsScreen(viewModel: NewsViewModel, onArticleClick: (Article) -> Unit) {
+    // Mengamati perubahan state dari ViewModel
     val uiState by viewModel.uiState.collectAsState()
 
-    Column(modifier = Modifier.fillMaxSize().background(Color(0xFFFFF3E0)).padding(16.dp)) {
-        Text("Tech News", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFFFF3E0)) // Background krem orange khas aplikasi kamu
+            .padding(horizontal = 16.dp)
+    ) {
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = "Tech News",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.ExtraBold,
+            color = Color(0xFFF57C00)
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // --- HANDLER UI STATES (Rubrik: UI States 25%) ---
         when (val state = uiState) {
+
+            // 1. STATE LOADING
+            is NewsUiState.Loading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        CircularProgressIndicator(color = Color(0xFFF57C00))
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text("Mengambil berita...", color = Color.Gray)
+                    }
+                }
+            }
+
+            // 2. STATE SUCCESS
             is NewsUiState.Success -> {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(bottom = 24.dp)
+                ) {
                     items(state.articles) { article ->
-                        Card(
-                            modifier = Modifier.fillMaxWidth().clickable { onArticleClick(article) }, // Navigasi ke detail
-                            shape = RoundedCornerShape(12.dp)
+                        NewsCard(
+                            article = article,
+                            onClick = { onArticleClick(article) }
+                        )
+                    }
+                }
+            }
+
+            // 3. STATE ERROR
+            is NewsUiState.Error -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(32.dp)
+                    ) {
+                        Text(
+                            text = "Gagal memuat berita:\n${state.message}",
+                            color = Color.Red,
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = { viewModel.fetchNews() },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF57C00))
                         ) {
-                            Column {
-                                // Menampilkan Gambar Berita
-                                AsyncImage(
-                                    model = article.urlToImage,
-                                    contentDescription = null,
-                                    modifier = Modifier.fillMaxWidth().height(180.dp),
-                                    contentScale = androidx.compose.ui.layout.ContentScale.Crop
-                                )
-                                Column(modifier = Modifier.padding(16.dp)) {
-                                    Text(article.title ?: "", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                                    Text(article.description ?: "", style = MaterialTheme.typography.bodySmall, maxLines = 2)
-                                }
-                            }
+                            Text("Coba Lagi")
                         }
                     }
                 }
             }
-            is NewsUiState.Loading -> { /* Indikator Loading [cite: 510] */ }
-            is NewsUiState.Error -> { /* Tampilan Error [cite: 510] */ }
         }
     }
 }
 
 @Composable
-fun ArticleCard(title: String, description: String) {
+fun NewsCard(article: Article, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+        Column {
+            // Gambar Berita menggunakan Coil3
+            AsyncImage(
+                model = article.urlToImage,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp),
+                contentScale = ContentScale.Crop
             )
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.DarkGray,
-                maxLines = 3
-            )
+
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = article.title ?: "No Title",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 2
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = article.description ?: "Tidak ada deskripsi tersedia.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Gray,
+                    maxLines = 3
+                )
+            }
         }
     }
 }
