@@ -12,6 +12,7 @@ import org.example.project.navigation.BottomNavItem
 fun BottomNavBar(navController: NavController) {
 
     val items = listOf(
+        BottomNavItem.News,
         BottomNavItem.Notes,
         BottomNavItem.Favorites,
         BottomNavItem.Profile

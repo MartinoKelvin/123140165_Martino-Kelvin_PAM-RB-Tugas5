@@ -38,7 +38,13 @@ fun NoteListScreen(
 
         // Header
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.Notes, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(32.dp))
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.Notes,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(32.dp)
+            )
             Spacer(modifier = Modifier.width(12.dp))
             Text("My Notes", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.ExtraBold)
         }
