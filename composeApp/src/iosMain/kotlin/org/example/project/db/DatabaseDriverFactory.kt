@@ -1,13 +1,6 @@
 package org.example.project.db
-
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.native.NativeSqliteDriver
-
 actual class DatabaseDriverFactory {
-    actual fun createDriver(): SqlDriver {
-        return NativeSqliteDriver(
-            schema = NotesDatabase.Schema,
-            name = "notes.db"
-        )
-    }
+    actual fun createDriver(): SqlDriver = NativeSqliteDriver(NotesDatabase.Schema, "notes.db")
 }

@@ -76,6 +76,8 @@ kotlin {
             // Settings (DataStore pengganti) [cite: 80]
             implementation("com.russhwolf:multiplatform-settings:1.1.1")
             implementation("com.russhwolf:multiplatform-settings-coroutines:1.1.1")
+
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
         }
     }
 }
