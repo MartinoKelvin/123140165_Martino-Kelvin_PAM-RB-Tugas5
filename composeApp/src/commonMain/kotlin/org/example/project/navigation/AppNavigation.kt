@@ -24,8 +24,14 @@ import org.example.project.viewmodel.NoteViewModel
 import org.example.project.viewmodel.NewsViewModel
 import org.example.project.data.NewsRepository
 
+import org.example.project.viewmodel.SettingsViewModel
+
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    noteViewModel: NoteViewModel,
+    settingsViewModel: SettingsViewModel
+) {
+
 
     val navController = rememberNavController()
 

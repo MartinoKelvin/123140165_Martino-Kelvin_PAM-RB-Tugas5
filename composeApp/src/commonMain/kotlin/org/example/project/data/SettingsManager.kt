@@ -3,6 +3,7 @@ import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
 import com.russhwolf.settings.set
 
+
 class SettingsManager(private val settings: Settings) {
     var theme: String
         get() = settings["app_theme", "system"]

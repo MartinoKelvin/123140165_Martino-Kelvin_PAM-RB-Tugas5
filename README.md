@@ -1,46 +1,74 @@
-# 📰 News & Notes App - Kotlin Multiplatform (KMP)
+# My News & Notes App - Pertemuan 7 (SQLDelight & DataStore)
 
-Aplikasi ini dikembangkan sebagai tugas praktikum **Pengembangan Aplikasi Mobile (PAM)** di **Informatika ITERA**. Project ini mendemonstrasikan implementasi Networking (Ktor), Image Loading (Coil), dan Arsitektur MVVM pada Kotlin Multiplatform.
+Tugas ini mendemonstrasikan implementasi **Offline-First Architecture** menggunakan Kotlin Multiplatform (KMP), SQLDelight sebagai Database Lokal, dan Multiplatform Settings untuk penyimpanan preferensi.
 
-## 👤 Identitas Mahasiswa
-- **Nama**: Martino Kelvin
-- **NIM**: 123140165
-- **Program Studi**: Informatika
-- **Instansi**: Institut Teknologi Sumatera (ITERA)
+## 👤 Identitas
 
-## 🎥 Link Video Demo
-- **Video Link**: https://drive.google.com/drive/folders/13Jz_8uMY6uVJFZ_Vqv9dCKzhHlVvx8oX
-
-## 🚀 Fitur Utama
-- **News Reader (Real-time)**: Mengambil berita teknologi terbaru dari API `saurav.tech` menggunakan Ktor Client.
-- **News Detail**: Menampilkan konten berita secara penuh dengan dukungan gambar (Coil3) dan fitur scrollable.
-- **Notes Management**: Fitur CRUD catatan dengan integrasi favorit.
-- **Modern UI**: Dibangun sepenuhnya menggunakan Jetpack Compose dengan skema warna konsisten (Orange-Cream).
-
-## 📊 Manajemen UI States (Rubrik Penilaian: 25%)
-Aplikasi menggunakan `sealed class NewsUiState` untuk menangani siklus hidup pengambilan data secara reaktif:
-1.  **Loading State**: Menampilkan `CircularProgressIndicator` saat aplikasi melakukan request ke API. Memberikan feedback visual kepada pengguna agar tidak bingung saat proses sinkronisasi data berlangsung.
-2.  **Success State**: Menampilkan daftar berita dalam bentuk `LazyColumn` setelah data berhasil diparsing dari JSON.
-3.  **Error State**: Menampilkan pesan error yang informatif dan tombol **"Retry"** jika terjadi gangguan koneksi (Network Error) atau kegagalan server, sehingga pengguna bisa mencoba memuat ulang data tanpa restart aplikasi.
-
-## 🛠️ Stack Teknologi
-- **Core**: Kotlin Multiplatform (KMP)
-- **UI Framework**: Compose Multiplatform
-- **Networking**: Ktor Client (Content Negotiation & JSON Serialization)
-- **Image Loading**: Coil 3 (Network Support)
-- **Navigation**: Jetpack Navigation Compose
-- **Concurrency**: Kotlin Coroutines & Flow
-
-## 📂 Struktur Proyek
-- `data/`: Model data (`NewsResponse`, `Article`) dan `NewsRepository`.
-- `viewmodel/`: `NewsViewModel` (StateFlow & mutableStateOf untuk Detail).
-- `screens/news/`: `NewsScreen` (List) dan `NewsDetailScreen` (Detail Content).
-- `navigation/`: Konfigurasi rute navigasi dan Bottom Navigation.
-
-## 📖 Cara Menjalankan Project
-1. **Sync Gradle**: Pastikan `mavenCentral()` sudah terdaftar di `settings.gradle.kts`.
-2. **Permission**: Izin internet sudah terpasang di `AndroidManifest.xml`.
-3. **Run**: Pilih modul `:composeApp` dan jalankan pada perangkat Android.
+- **Nama:** Martino Kelvin
+- **NIM:** 123140165
+- **Program Studi:** Informatika
+- **Instansi:** Institut Teknologi Sumatera (ITERA)
 
 ---
-© 2026 Martino Kelvin - 123140165 - Informatika ITERA
+
+## Link
+https://drive.google.com/drive/folders/1rcBU-ZGkMuYIRVEQzlCblJ-1YXHfCntw?usp=sharing
+
+---
+
+## 🚀 Fitur Utama
+
+1. **CRUD Operations (Offline-First):** Menambah, membaca, dan menghapus catatan langsung dari penyimpanan lokal.
+2. **Search Functionality:** Fitur pencarian catatan berdasarkan judul atau isi menggunakan query SQL `LIKE`.
+3. **Settings & Persistence:** Menyimpan preferensi tema (Dark/Light Mode) yang tetap bertahan meskipun aplikasi ditutup (Persistent).
+4. **Reactive UI:** UI otomatis terupdate saat ada perubahan data di database menggunakan `StateFlow`.
+
+---
+
+## 🛠️ Tech Stack & Konfigurasi
+
+- **SQLDelight:** Untuk Database SQLite Multiplatform.
+- **Multiplatform Settings:** Untuk penyimpanan Key-Value (DataStore).
+- **Kotlinx Datetime:** Manajemen waktu pembuatan catatan.
+- **Material 3:** Desain UI modern dengan dukungan Dark Mode.
+
+### Database Schema (`Note.sq`)
+
+```sql
+CREATE TABLE Note (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    created_at INTEGER NOT NULL
+);
+
+-- Query untuk Fitur Search
+search:
+SELECT * FROM Note
+WHERE title LIKE ('%' || ? || '%')
+OR content LIKE ('%' || ? || '%')
+ORDER BY created_at DESC;
+```
+
+---
+
+## 📂 Struktur Project (PBO Implementation)
+
+Project ini menerapkan prinsip **Object-Oriented Programming (OOP)**, khususnya **Inheritance & Polimorfisme**, melalui mekanisme `expect/actual` pada Kotlin Multiplatform:
+
+- **`DatabaseDriverFactory` (Abstraksi & Polimorfisme):** Menggunakan mekanisme `expect/actual` untuk mengabstraksi pembuatan driver database. Implementasi spesifik dilakukan pada masing-masing platform:
+  - **Android:** Menggunakan `AndroidSqliteDriver` untuk akses SQLite sistem Android.
+  - **iOS:** Menggunakan `NativeSqliteDriver` untuk akses SQLite sistem iOS.
+- **`NoteRepository` (Encapsulation):** Bertindak sebagai _Single Source of Truth_ yang mengenkapsulasi logika akses data. Repository ini mengelola aliran data antara Database (SQLDelight) dan UI menggunakan `Flow`.
+- **`ViewModel` (State Management):** Memisahkan logika bisnis dari UI (Separation of Concerns), memastikan state aplikasi tetap terjaga dan reaktif.
+
+---
+
+## 📺 Demo Video Checklist
+
+Berikut adalah poin-poin yang didemonstrasikan dalam video untuk memenuhi kriteria penilaian:
+
+- [X] **Fitur CRUD:** Menambah catatan baru dan menghapusnya dari daftar.
+- [X] **Fitur Search:** Mencari catatan secara real-time menggunakan Search Bar (Query SQL `LIKE`).
+- [X] **Settings & DataStore:** Mengubah tema aplikasi (Dark/Light Mode) dan memastikan pilihan tersimpan saat aplikasi dibuka kembali.
+- [X] **Bukti Offline-First:** Mematikan koneksi internet (Airplane Mode) dan menunjukkan bahwa aplikasi tetap berfungsi penuh untuk membaca serta menambah data ke Database Lokal.
