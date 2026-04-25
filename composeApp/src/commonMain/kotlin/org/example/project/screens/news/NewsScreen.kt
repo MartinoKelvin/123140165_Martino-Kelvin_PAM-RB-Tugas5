@@ -22,13 +22,13 @@ import org.example.project.viewmodel.NewsUiState
 
 @Composable
 fun NewsScreen(viewModel: NewsViewModel, onArticleClick: (Article) -> Unit) {
-    // Mengamati perubahan state dari ViewModel
+
     val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFF3E0)) // Background krem orange khas aplikasi kamu
+            .background(Color(0xFFFFF3E0))
             .padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(24.dp))
@@ -103,6 +103,7 @@ fun NewsScreen(viewModel: NewsViewModel, onArticleClick: (Article) -> Unit) {
         }
     }
 }
+
 
 @Composable
 fun NewsCard(article: Article, onClick: () -> Unit) {
