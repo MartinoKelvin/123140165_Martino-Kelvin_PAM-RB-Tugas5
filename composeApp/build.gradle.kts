@@ -33,6 +33,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation("io.ktor:ktor-client-android:${ktorVersion}")
             implementation("app.cash.sqldelight:android-driver:$sqlDelightVersion")
+            implementation("io.insert-koin:koin-android:3.5.3")
+
         }
 
         // PERBAIKAN: Gunakan deklarasi yang benar untuk iOS [cite: 183, 187]
@@ -78,6 +80,9 @@ kotlin {
             implementation("com.russhwolf:multiplatform-settings-coroutines:1.1.1")
 
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+
+            implementation("io.insert-koin:koin-core:3.5.3")
+            implementation("io.insert-koin:koin-compose:1.1.2")
         }
     }
 }

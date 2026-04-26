@@ -1,74 +1,60 @@
-# My News & Notes App - Pertemuan 7 (SQLDelight & DataStore)
+# NoteApp - Platform-Specific Features (Tugas Minggu 8)
 
-Tugas ini mendemonstrasikan implementasi **Offline-First Architecture** menggunakan Kotlin Multiplatform (KMP), SQLDelight sebagai Database Lokal, dan Multiplatform Settings untuk penyimpanan preferensi.
+Proyek ini adalah aplikasi manajemen catatan berbasis **Kotlin Multiplatform (KMP)** yang diimplementasikan untuk memenuhi tugas Pertemuan 8 mata kuliah Pengembangan Aplikasi Mobile. Fokus utama tugas ini adalah penerapan pola **expect/actual**, **Dependency Injection (DI)** menggunakan Koin, dan integrasi **Platform APIs**.
 
-## 👤 Identitas
-
+## 👤 Identitas Mahasiswa
 - **Nama:** Martino Kelvin
-- **NIM:** 123140165
-- **Program Studi:** Informatika
+- **NIM:** 121140xxx (Sesuaikan NIM kamu)
+- **Program Studi:** Teknik Informatika
 - **Instansi:** Institut Teknologi Sumatera (ITERA)
 
 ---
 
-## Link
-https://drive.google.com/drive/folders/1rcBU-ZGkMuYIRVEQzlCblJ-1YXHfCntw?usp=sharing
+## 🚀 Fitur & Implementasi (Minggu 8)
+
+1. **Dependency Injection (Koin):** Seluruh manajemen objek seperti Repository, ViewModel, dan Platform Services dikelola melalui Koin DI untuk meningkatkan modularitas dan testability.
+2. **Platform-Specific Info:** Implementasi pola `expect/actual` untuk mengambil informasi hardware perangkat (Model & OS) secara native.
+3. **Network Status Monitoring:** Deteksi status koneksi internet secara real-time menggunakan `ConnectivityManager` di Android.
+4. **UI Integration:** Menampilkan informasi perangkat di halaman Settings dan indikator jaringan di halaman utama.
 
 ---
 
-## 🚀 Fitur Utama
+## 🏗️ Arsitektur & Struktur Proyek
 
-1. **CRUD Operations (Offline-First):** Menambah, membaca, dan menghapus catatan langsung dari penyimpanan lokal.
-2. **Search Functionality:** Fitur pencarian catatan berdasarkan judul atau isi menggunakan query SQL `LIKE`.
-3. **Settings & Persistence:** Menyimpan preferensi tema (Dark/Light Mode) yang tetap bertahan meskipun aplikasi ditutup (Persistent).
-4. **Reactive UI:** UI otomatis terupdate saat ada perubahan data di database menggunakan `StateFlow`.
+Aplikasi ini memisahkan kode antara logika bisnis (Shared) dan implementasi spesifik platform.
 
----
 
-## 🛠️ Tech Stack & Konfigurasi
 
-- **SQLDelight:** Untuk Database SQLite Multiplatform.
-- **Multiplatform Settings:** Untuk penyimpanan Key-Value (DataStore).
-- **Kotlinx Datetime:** Manajemen waktu pembuatan catatan.
-- **Material 3:** Desain UI modern dengan dukungan Dark Mode.
-
-### Database Schema (`Note.sq`)
-
-```sql
-CREATE TABLE Note (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    content TEXT NOT NULL,
-    created_at INTEGER NOT NULL
-);
-
--- Query untuk Fitur Search
-search:
-SELECT * FROM Note
-WHERE title LIKE ('%' || ? || '%')
-OR content LIKE ('%' || ? || '%')
-ORDER BY created_at DESC;
-```
+### Struktur Folder Penting:
+- **`commonMain/di/AppModule.kt`**: Konfigurasi Koin Module menggunakan `viewModelOf` dan `singleOf`.
+- **`commonMain/platform/`**: Deklarasi `expect class` untuk DeviceInfo dan NetworkMonitor.
+- **`androidMain/platform/`**: Implementasi `actual` menggunakan Android API seperti `Build.MODEL` dan `ConnectivityManager`.
+- **`androidMain/MyApp.kt`**: Inisialisasi `startKoin` dengan `androidContext`.
 
 ---
 
-## 📂 Struktur Project (PBO Implementation)
+## 📸 Screenshots Implementation
 
-Project ini menerapkan prinsip **Object-Oriented Programming (OOP)**, khususnya **Inheritance & Polimorfisme**, melalui mekanisme `expect/actual` pada Kotlin Multiplatform:
-
-- **`DatabaseDriverFactory` (Abstraksi & Polimorfisme):** Menggunakan mekanisme `expect/actual` untuk mengabstraksi pembuatan driver database. Implementasi spesifik dilakukan pada masing-masing platform:
-  - **Android:** Menggunakan `AndroidSqliteDriver` untuk akses SQLite sistem Android.
-  - **iOS:** Menggunakan `NativeSqliteDriver` untuk akses SQLite sistem iOS.
-- **`NoteRepository` (Encapsulation):** Bertindak sebagai _Single Source of Truth_ yang mengenkapsulasi logika akses data. Repository ini mengelola aliran data antara Database (SQLDelight) dan UI menggunakan `Flow`.
-- **`ViewModel` (State Management):** Memisahkan logika bisnis dari UI (Separation of Concerns), memastikan state aplikasi tetap terjaga dan reaktif.
+| **Device Information (Settings Screen)** | **Network Status Indicator** |
+|:---:|:---:|
+| ![Device Info Screenshot](ISI_LINK_GAMBAR_DISINI) | ![Network Indicator Screenshot](ISI_LINK_GAMBAR_DISINI) |
+| *Menunjukkan Model Perangkat & Versi OS* | *Indikator saat koneksi terputus (Airplane Mode)* |
 
 ---
 
-## 📺 Demo Video Checklist
+## 🎥 Video Demo
 
-Berikut adalah poin-poin yang didemonstrasikan dalam video untuk memenuhi kriteria penilaian:
+Berikut adalah demonstrasi aplikasi berdurasi 45 detik yang menunjukkan inisialisasi DI, pengecekan informasi perangkat, dan perubahan status jaringan:
 
-- [X] **Fitur CRUD:** Menambah catatan baru dan menghapusnya dari daftar.
-- [X] **Fitur Search:** Mencari catatan secara real-time menggunakan Search Bar (Query SQL `LIKE`).
-- [X] **Settings & DataStore:** Mengubah tema aplikasi (Dark/Light Mode) dan memastikan pilihan tersimpan saat aplikasi dibuka kembali.
-- [X] **Bukti Offline-First:** Mematikan koneksi internet (Airplane Mode) dan menunjukkan bahwa aplikasi tetap berfungsi penuh untuk membaca serta menambah data ke Database Lokal.
+👉 **[LINK VIDEO DEMO TUGAS MINGGU 8 - MARTINO KELVIN](https://drive.google.com/drive/folders/17uEZmh5SdTgb2Wu6DiX7H2Xtlsez7zQZ?usp=sharing)**
+
+---
+
+## 🛠️ Cara Menjalankan Aplikasi
+1. Lakukan **Gradle Sync** untuk memastikan library Koin (`koin-core`, `koin-compose`) terunduh.
+2. Pastikan file `AndroidManifest.xml` sudah memiliki atribut `android:name=".MyApp"` pada tag `<application>` agar Koin dapat berjalan.
+3. Jalankan aplikasi pada perangkat Android.
+4. Buka Menu **Profile** > **Settings** untuk melihat detail perangkat.
+
+---
+*© 2026 - Martino Kelvin - Pengembangan Aplikasi Mobile ITERA*

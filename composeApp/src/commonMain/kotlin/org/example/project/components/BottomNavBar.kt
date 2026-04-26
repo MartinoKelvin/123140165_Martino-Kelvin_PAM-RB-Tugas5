@@ -15,7 +15,8 @@ fun BottomNavBar(navController: NavController) {
         BottomNavItem.News,
         BottomNavItem.Notes,
         BottomNavItem.Favorites,
-        BottomNavItem.Profile
+        BottomNavItem.Profile,
+        BottomNavItem.Settings
     )
 
     val currentRoute = navController.currentBackStackEntryAsState()
