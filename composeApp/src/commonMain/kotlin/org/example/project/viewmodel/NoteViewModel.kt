@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import com.example.project.data.Note.Note
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.example.project.data.NoteRepository
 
-class NoteViewModel : ViewModel() {
+class NoteViewModel() : ViewModel() {
     private val _notes = MutableStateFlow<List<Note>>(emptyList())
     val notes = _notes.asStateFlow()
 

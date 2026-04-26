@@ -17,13 +17,13 @@ import kotlinx.serialization.json.Json
 import org.example.project.components.BottomNavBar
 import org.example.project.screens.favorites.FavoritesScreen
 import org.example.project.screens.profile.ProfileScreen
+import org.example.project.screens.profile.SettingsScreen // Pastikan diimport
 import org.example.project.screens.notes.*
 import org.example.project.screens.news.NewsScreen
 import org.example.project.screens.news.NewsDetailScreen
 import org.example.project.viewmodel.NoteViewModel
 import org.example.project.viewmodel.NewsViewModel
 import org.example.project.data.NewsRepository
-
 import org.example.project.viewmodel.SettingsViewModel
 
 @Composable
@@ -31,8 +31,6 @@ fun AppNavigation(
     noteViewModel: NoteViewModel,
     settingsViewModel: SettingsViewModel
 ) {
-
-
     val navController = rememberNavController()
 
     // Setup HttpClient dengan Ktor
@@ -53,11 +51,12 @@ fun AppNavigation(
 
     val newsRepository = remember { NewsRepository(client) }
 
-    // Inisialisasi ViewModel
+    // Inisialisasi ViewModel News
     val newsViewModel: NewsViewModel = viewModel {
         NewsViewModel(newsRepository)
     }
-    val noteViewModel: NoteViewModel = viewModel()
+
+    // PENTING: Jangan inisialisasi noteViewModel lagi di sini karena sudah dikirim dari MainActivity
 
     Scaffold(
         bottomBar = {
@@ -83,9 +82,7 @@ fun AppNavigation(
                 NewsScreen(
                     viewModel = newsViewModel,
                     onArticleClick = { article ->
-                        // 1. Simpan artikel yang dipilih ke ViewModel
                         newsViewModel.selectArticle(article)
-                        // 2. Navigasi ke halaman detail
                         navController.navigate("news_detail")
                     }
                 )
@@ -109,6 +106,14 @@ fun AppNavigation(
             // --- TAB 4: Profile ---
             composable(Screen.Profile.route) {
                 ProfileScreen()
+            }
+
+            // --- TAB 5: Settings (Poin Tugas DataStore) ---
+            composable("settings_screen") {
+                SettingsScreen(
+                    viewModel = settingsViewModel,
+                    onBack = { navController.popBackStack() }
+                )
             }
 
             // --- Screen Detail Berita (Non-Tab) ---
