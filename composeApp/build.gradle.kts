@@ -30,6 +30,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             // 2. WAJIB: Engine Ktor untuk Android agar tidak force close
             implementation("io.ktor:ktor-client-android:${ktorVersion}")
+            implementation("io.ktor:ktor-client-cio:2.3.7")
+            implementation("io.ktor:ktor-client-okhttp:${ktorVersion}")
         }
 
         commonMain.dependencies {
@@ -55,9 +57,24 @@ kotlin {
             implementation("io.ktor:ktor-client-logging:${ktorVersion}")
             implementation("io.coil-kt.coil3:coil-compose:3.0.0-alpha06")
             implementation("io.coil-kt.coil3:coil-network-ktor:3.0.0-alpha06")
+            implementation("io.insert-koin:koin-core:3.5.3")
+            implementation("io.insert-koin:koin-compose:1.1.2")
+            implementation("io.insert-koin:koin-compose-viewmodel:1.2.0-Beta4")
+            implementation("io.ktor:ktor-client-cio:2.3.7")
+            implementation("io.coil-kt.coil3:coil-compose:3.0.0-alpha06")
+            implementation("io.coil-kt.coil3:coil-network-ktor:3.0.0-alpha06")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(kotlin("test"))
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+            implementation("io.insert-koin:koin-test:3.5.3")
+            implementation("io.mockk:mockk:1.13.9")
+            implementation("app.cash.turbine:turbine:1.0.0")
+        }
+
+        androidUnitTest.dependencies {
+            implementation("io.mockk:mockk:1.13.9")
         }
     }
 }
